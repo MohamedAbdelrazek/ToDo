@@ -38,4 +38,9 @@ dependencies {
     annotationProcessor "androidx.lifecycle:lifecycle-compiler:$lifecycle_version"
 
     implementation 'com.facebook.stetho:stetho-okhttp3:1.5.1'
+    implementation 'androidx.recyclerview:recyclerview:1.1.0-beta04'
+
+    //ButterKnife
+    implementation 'com.jakewharton:butterknife:10.2.0'
+    annotationProcessor 'com.jakewharton:butterknife-compiler:10.2.0'
 }

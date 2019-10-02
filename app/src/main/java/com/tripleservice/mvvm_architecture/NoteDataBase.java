@@ -36,10 +36,14 @@ public abstract class NoteDataBase extends RoomDatabase {
                 new AsyncTask<Void, Void, Void>() {
                     @Override
                     protected Void doInBackground(Void... voids) {
-                        instance.noteDao().insert(new Note("title 1", "Desc 1", 1));
-                        instance.noteDao().insert(new Note("title 1", "Desc 1", 1));
-                        instance.noteDao().insert(new Note("title 1", "Desc 1", 1));
-
+                        instance.noteDao().insert(new Note("Title 1", "Desc 1", 1));
+                        instance.noteDao().insert(new Note("Title 2", "Desc 2", 2));
+                        instance.noteDao().insert(new Note("Title 3", "Desc 3", 3));
+                        instance.noteDao().insert(new Note("Title 4", "Desc 4", 4));
+                        instance.noteDao().insert(new Note("Title 5", "Desc 5", 5));
+                        instance.noteDao().insert(new Note("Title 6", "Desc 6", 6));
+                        instance.noteDao().insert(new Note("Title 7", "Desc 7", 7));
+                        instance.noteDao().insert(new Note("Title 8", "Desc 8", 8));
                         return null;
                     }
                 }.execute();
