@@ -1,10 +1,13 @@
 package com.tripleservice.mvvm_architecture;
 
 import android.content.Context;
+import android.os.AsyncTask;
 
+import androidx.annotation.NonNull;
 import androidx.room.Database;
 import androidx.room.Room;
 import androidx.room.RoomDatabase;
+import androidx.sqlite.db.SupportSQLiteDatabase;
 
 @Database(entities = {Note.class}, version = 1, exportSchema = false)
 public abstract class NoteDataBase extends RoomDatabase {
@@ -14,12 +17,35 @@ public abstract class NoteDataBase extends RoomDatabase {
     public static NoteDataBase instance;
 
     public static synchronized NoteDataBase getInstance(Context context) {
-        if (instance != null) {
-            return instance;
+        if (instance == null) {
+            Room.databaseBuilder(context.getApplicationContext(), NoteDataBase.class, "note_db")
+                    .fallbackToDestructiveMigration()
+                    .addCallback(callback)
+                    .build();
         }
-        instance = Room.databaseBuilder(context.getApplicationContext(), NoteDataBase.class, "note_db")
-                .fallbackToDestructiveMigration()
-                .build();
-        return null;
+        return instance;
     }
+
+    static RoomDatabase.Callback callback = new RoomDatabase.Callback() {
+
+        @Override
+        public void onCreate(@NonNull SupportSQLiteDatabase db) {
+            super.onCreate(db);
+            {
+                new AsyncTask<Void, Void, Void>() {
+                    @Override
+                    protected Void doInBackground(Void... voids) {
+                        instance.noteDao().insert(new Note("title 1", "Desc 1", 1));
+                        instance.noteDao().insert(new Note("title 1", "Desc 1", 1));
+                        instance.noteDao().insert(new Note("title 1", "Desc 1", 1));
+
+                        return null;
+                    }
+                }.execute();
+            }
+
+        }
+    };
+
+
 }

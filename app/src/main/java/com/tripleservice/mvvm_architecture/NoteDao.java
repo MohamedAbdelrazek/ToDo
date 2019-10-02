@@ -1,5 +1,6 @@
 package com.tripleservice.mvvm_architecture;
 
+import androidx.lifecycle.LiveData;
 import androidx.room.Dao;
 import androidx.room.Delete;
 import androidx.room.Insert;
@@ -25,6 +26,6 @@ public interface NoteDao {
     void delete();
 
     @Query("Select * From notes_table order by priority_column")
-    List<Note> getAllNotes();
+    LiveData<List<Note>> getAllNotes();
 }
 

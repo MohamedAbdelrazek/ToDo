@@ -36,4 +36,6 @@ dependencies {
 
     implementation "androidx.lifecycle:lifecycle-extensions:$lifecycle_version"
     annotationProcessor "androidx.lifecycle:lifecycle-compiler:$lifecycle_version"
+
+    implementation 'com.facebook.stetho:stetho-okhttp3:1.5.1'
 }
