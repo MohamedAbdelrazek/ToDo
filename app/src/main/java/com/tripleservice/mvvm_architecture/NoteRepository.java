@@ -1,5 +1,6 @@
 package com.tripleservice.mvvm_architecture;
 
+
 import android.app.Application;
 import android.os.AsyncTask;
 
@@ -11,7 +12,7 @@ public class NoteRepository {
     private NoteDao mNoteDao;
     private LiveData<List<Note>> mAllNotes;
 
-    public NoteRepository(Application  application) {
+    public NoteRepository(Application application) {
         NoteDataBase noteDataBase = NoteDataBase.getInstance(application);
         mNoteDao = noteDataBase.noteDao();
         mAllNotes = mNoteDao.getAllNotes();

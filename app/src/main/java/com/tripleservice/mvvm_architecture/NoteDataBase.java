@@ -18,7 +18,7 @@ public abstract class NoteDataBase extends RoomDatabase {
 
     public static synchronized NoteDataBase getInstance(Context context) {
         if (instance == null) {
-            Room.databaseBuilder(context.getApplicationContext(), NoteDataBase.class, "note_db")
+            instance = Room.databaseBuilder(context.getApplicationContext(), NoteDataBase.class, "note_db")
                     .fallbackToDestructiveMigration()
                     .addCallback(callback)
                     .build();
@@ -26,6 +26,7 @@ public abstract class NoteDataBase extends RoomDatabase {
         return instance;
     }
 
+    // this call back is used to populate static content inside DB.
     static RoomDatabase.Callback callback = new RoomDatabase.Callback() {
 
         @Override

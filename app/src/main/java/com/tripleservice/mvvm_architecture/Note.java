@@ -9,7 +9,6 @@ import androidx.room.PrimaryKey;
 public class Note {
 
     @PrimaryKey(autoGenerate = true)
-    @ColumnInfo(name = "id_column")
     private int id;
 
     @ColumnInfo(name = "title_column")
