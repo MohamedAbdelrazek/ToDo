@@ -21,7 +21,7 @@ public class AddNoteActivity extends AppCompatActivity {
     public static String EXTRA_TITLE = "com.tripleservice.mvvm_architecture.EXTRA_TITLE";
     public static String EXTRA_DESC = "com.tripleservice.mvvm_architecture.EXTRA_DESC";
     public static String EXTRA_PRIORITY = "com.tripleservice.mvvm_architecture.EXTRA_PRIORITY";
-
+    public static String EXTRA_ID = "com.tripleservice.mvvm_architecture.EXTRA_ID";
 
     @BindView(R.id.activity_add_note_title_edit_text)
     EditText activityAddNoteTitleEditText;
@@ -41,7 +41,18 @@ public class AddNoteActivity extends AppCompatActivity {
         activityAddNotePriorityNumberPicker.setMaxValue(10);
 
         getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_close);
-        setTitle("Add Note");
+
+        Intent intent = getIntent();
+        if (intent.hasExtra(EXTRA_ID)) {
+            setTitle("Edit Note");
+
+            activityAddNoteTitleEditText.setText(intent.getStringExtra(EXTRA_TITLE));
+            activityAddNoteDescEditText.setText(intent.getStringExtra(EXTRA_DESC));
+            activityAddNotePriorityNumberPicker.setValue(intent.getIntExtra(EXTRA_PRIORITY, 1));
+
+        } else {
+            setTitle("Add Note");
+        }
     }
 
     @Override
@@ -75,11 +86,18 @@ public class AddNoteActivity extends AppCompatActivity {
             return;
         }
 
-
         Intent intent = new Intent();
         intent.putExtra(EXTRA_TITLE, title);
         intent.putExtra(EXTRA_DESC, desc);
         intent.putExtra(EXTRA_PRIORITY, priority);
+
+
+        int id = getIntent().getIntExtra(EXTRA_ID, -1);
+
+        if (id != -1) {
+            intent.putExtra(EXTRA_ID, id);
+        }
+
         setResult(RESULT_OK, intent);
         finish();
 

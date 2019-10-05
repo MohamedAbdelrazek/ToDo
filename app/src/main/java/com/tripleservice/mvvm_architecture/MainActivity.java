@@ -29,7 +29,13 @@ import butterknife.ButterKnife;
 
 public class MainActivity extends AppCompatActivity implements OnItemClicked {
 
-    private static final int RESULT_CODE = 121;
+    public static String EXTRA_TITLE = "com.tripleservice.mvvm_architecture.EXTRA_TITLE";
+    public static String EXTRA_DESC = "com.tripleservice.mvvm_architecture.EXTRA_DESC";
+    public static String EXTRA_PRIORITY = "com.tripleservice.mvvm_architecture.EXTRA_PRIORITY";
+    public static String EXTRA_ID = "com.tripleservice.mvvm_architecture.EXTRA_ID";
+
+    private static final int ADD_RESULT_CODE = 121;
+    private static final int EDIT_RESULT_CODE = 122;
     @BindView(R.id.floatingActionButton)
     FloatingActionButton addActionButton;
 
@@ -62,7 +68,7 @@ public class MainActivity extends AppCompatActivity implements OnItemClicked {
         });
 
         new ItemTouchHelper(new ItemTouchHelper.SimpleCallback(0,
-                ItemTouchHelper.LEFT|ItemTouchHelper.RIGHT) {
+                ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT) {
             @Override
             public boolean onMove(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder, @NonNull RecyclerView.ViewHolder target) {
                 return false;
@@ -81,7 +87,7 @@ public class MainActivity extends AppCompatActivity implements OnItemClicked {
         addActionButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivityForResult(new Intent(MainActivity.this, AddNoteActivity.class), RESULT_CODE);
+                startActivityForResult(new Intent(MainActivity.this, AddNoteActivity.class), ADD_RESULT_CODE);
             }
         });
     }
@@ -91,20 +97,39 @@ public class MainActivity extends AppCompatActivity implements OnItemClicked {
         //handle recycler click events...
 
 
+        Intent intent = new Intent(this, AddNoteActivity.class);
+
+        intent.putExtra(EXTRA_TITLE, note.getTitle());
+        intent.putExtra(EXTRA_DESC, note.getDescription());
+        intent.putExtra(EXTRA_PRIORITY, note.getPriority());
+        intent.putExtra(EXTRA_ID, note.getId());
+        
+        startActivityForResult(intent, EDIT_RESULT_CODE);
 
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == RESULT_CODE && resultCode == RESULT_OK) {
-            String title = data.getStringExtra(AddNoteActivity.EXTRA_TITLE);
-            String desc = data.getStringExtra(AddNoteActivity.EXTRA_DESC);
-            int priority = data.getIntExtra(AddNoteActivity.EXTRA_PRIORITY, 1);
+        if (requestCode == ADD_RESULT_CODE && resultCode == RESULT_OK) {
+            String title = data.getStringExtra(EXTRA_TITLE);
+            String desc = data.getStringExtra(EXTRA_DESC);
+            int priority = data.getIntExtra(EXTRA_PRIORITY, 1);
             mNoteViewModel.insert(new Note(title, desc, priority));
             Toast.makeText(this, "Note Saved !! ", Toast.LENGTH_SHORT).show();
-        } else {
-            Toast.makeText(this, "Note not Saved !! ", Toast.LENGTH_SHORT).show();
+        }
+        if (requestCode == EDIT_RESULT_CODE && resultCode == RESULT_OK) {
+
+            int id = data.getIntExtra(EXTRA_ID, -1);
+            if (id == -1) {
+                Toast.makeText(this, "can't update Note !", Toast.LENGTH_SHORT).show();
+                return;
+            }
+            String title = data.getStringExtra(EXTRA_TITLE);
+            String desc = data.getStringExtra(EXTRA_DESC);
+            int priority = data.getIntExtra(EXTRA_PRIORITY, 1);
+
+            mNoteViewModel.update(new Note(id, title, desc, priority));
         }
     }
 

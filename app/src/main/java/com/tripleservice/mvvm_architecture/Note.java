@@ -3,6 +3,7 @@ package com.tripleservice.mvvm_architecture;
 
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
+import androidx.room.Ignore;
 import androidx.room.PrimaryKey;
 
 @Entity(tableName = "notes_table")
@@ -26,12 +27,21 @@ public class Note {
         this.priority = priority;
     }
 
-    public void setId(int id) {
+
+    @Ignore
+    public Note(int id, String title, String description, int priority) {
         this.id = id;
+        this.title = title;
+        this.description = description;
+        this.priority = priority;
     }
 
     public int getId() {
         return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 
     public String getTitle() {
